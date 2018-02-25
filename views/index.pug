@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title Pook Haus
+    link(rel="shortcut icon" href="favicon.ico" type="image/x-icon")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src="client.js")
+  body
+    h1 Pook Haus
+    for basestation in basestations
+      div
+        p= basestation.id
+        input(type='text' value=basestation.name placeholder="Basestation Name")
+        for node in basestation.nodes
+          div
+            p= node.id
+            input(type='text' value=node.name placeholder="Node Name")
+            button(data-command="O" data-id=node.id) Turn On
+            button(data-command="F" data-id=node.id) Turn Off
