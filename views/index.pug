@@ -7,13 +7,9 @@ html
     script(src="client.js")
   body
     h1 Pook Haus
-    for basestation in basestations
+    for node in nodes
       div
-        p= basestation.id
-        input(type='text' value=basestation.name placeholder="Basestation Name")
-        for node in basestation.nodes
-          div
-            p= node.id
-            input(type='text' value=node.name placeholder="Node Name")
-            button(data-command="O" data-id=node.id) Turn On
-            button(data-command="F" data-id=node.id) Turn Off
+        p= node.id
+        input(type='text' value=node.name placeholder="Node Name")
+        button(data-command="on" data-id=node.id) Turn On
+        button(data-command="off" data-id=node.id) Turn Off
