@@ -17,11 +17,20 @@ const url = require('url')
 
 bookshelf.plugin(upsert)
 
+Command = {
+  Ping: "ping",
+  On: "on",
+  Off: "off"
+}
+
 const Node = bookshelf.Model.extend({
   tableName: 'nodes'
 })
 
 let sendCommand = function(command) {
+  if (command.command != Command.Ping) {
+    console.log(`Sending command "${command.command}" to ${command.id || 'everyone'}...`)
+  }
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(command));
@@ -63,7 +72,7 @@ app.post('/', function(req, res) {
               if (execution.command == "action.devices.commands.OnOff") {
                 sendCommand({
                   "id" : device.id,
-                  "command" : execution.params.on ? "on" : "off"
+                  "command" : execution.params.on ? Command.On : Command.Off
                 })
               }
             })
@@ -118,5 +127,8 @@ wss.on('connection', function connection(ws, req) {
     }
   })
 })
+
+// Keep our connection(s) alive on Heroku
+setInterval(() => sendCommand({ "command" : Command.Ping }), 50000)
 
 server.listen(4236, () => console.log('Example app listening on port 4236!'))
